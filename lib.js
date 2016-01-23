@@ -1,7 +1,18 @@
 'use strict';
 var _ = require('underscore');
 
-function create(sequelize) {
+var defaultSamples = {
+  UUID: '413e8630-c16c-11e5-b8c9-9b7d37852114',
+  BIGINT: 1,
+  INTEGER: 1,
+  ENUM: function(type) { return type.values.join(' | '); },
+  STRING: 'string',
+  DATE: '2015-12-31T23:59:59.123',
+  TEXT: 'text'
+};
+
+function create(sequelize, samples) {
+  samples = _.extend(defaultSamples, samples);
 
   function printer() {
     var value = '';
@@ -31,16 +42,6 @@ function create(sequelize) {
     };
     return self;
   }
-
-  var samples = {
-    UUID: '413e8630-c16c-11e5-b8c9-9b7d37852114',
-    BIGINT: 1,
-    INTEGER: 1,
-    ENUM: function(type) { return type.values.join(' | '); },
-    STRING: 'string',
-    DATE: '2015-12-31T23:59:59.123',
-    TEXT: 'text'
-  };
 
   function createObject(model, options) {
     options = options || {};
@@ -179,14 +180,6 @@ function create(sequelize) {
       success: success,
       successArray: successArray
     });
-
-    // doc.toString = function() {
-    //   var string = '';
-    //   _.each(doc, function(value) {
-    //     string += value + '\n';
-    //   });
-    //   return string;
-    // }
 
     return doc;
   }
