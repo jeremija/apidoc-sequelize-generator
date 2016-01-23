@@ -23,7 +23,12 @@
   },
   "homepage": "https://github.com/jeremija/apidoc-sequelize-generator#readme",
   "devDependencies": {
+    "chai": "^3.4.1",
     "mocha": "^2.3.4",
-    "sequelize": "^3.18.0"
+    "sequelize": "^3.18.0",
+    "sqlite3": "^3.1.1"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3"
   }
 }

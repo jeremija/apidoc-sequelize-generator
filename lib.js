@@ -120,22 +120,27 @@ function createObject(model, options) {
   return root;
 }
 
-function defineDoc(model, modelName, type) {
-  var p = printer().header(modelName = type);
+function defineDoc(model, type) {
+  var p = printer().header(model.name + type);
   _.each(model.rawAttributes, function(attr, attrName) {
+    if (attr.allowNull) attrName = '[' + attrName + ']';
     p.print(
-      '@api' + type, '{' + attr.type.key.toLowerCase() + '}', attrName
+      '@apiParam', '{' + attr.type.key.toLowerCase() + '}', attrName
     );
   });
   _.each(model.associations, function(association, associationName) {
-    var _type = association.target.tableName;
+    var _type = association.target.name;
+    let fkAttributes = association.target.rawAttributes[association.foreignKey];
+    let allowNull = fkAttributes ? fkAttributes.allowNull : false;
     if (association.associationType === 'HasMany') {
       _type += '[]';
+    } else if (allowNull) {
+      associationName = '[' + associationName + ']';
     }
-    p.print('@api' + type, '{' + _type + '}', associationName);
+    p.print('@apiParam', '{' + _type + '}', associationName);
   });
 
-  return p.footer();
+  return p.footer().value();
 }
 
 function defineExample(obj, objName, exampleType, isArray) {
@@ -160,26 +165,26 @@ function defineExamples(model, options) {
   var response = defineExample(obj, name, 'Success', false).value();
   var responseArray = defineExample(obj, name, 'Success', true).value();
 
-  return request + requestArray + response + responseArray;
+  return [request, requestArray, response, responseArray];
 }
 
 function auto(sequelize, options) {
-  _.each(sequelize.models, function(model, key) {
+  return _.map(sequelize.models, function(model, key) {
     defineExamples(model, options[model.tableName]);
   });
 }
 
-var examples = defineExamples(sequelize.models.form, {
-  ignoredFields: ['createdAt', 'updatedAt'],
-  include: [{
-    model: 'group',
-    include: [{
-      model: 'element'
-    }]
-  }]
-});
+// var examples = defineExamples(sequelize.models.form, {
+//   ignoredFields: ['createdAt', 'updatedAt'],
+//   include: [{
+//     model: 'group',
+//     include: [{
+//       model: 'element'
+//     }]
+//   }]
+// });
 
-console.log('examples', examples);
+// console.log('examples', examples);
 
 module.exports = {
   auto: auto,
