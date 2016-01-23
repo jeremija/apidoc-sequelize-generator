@@ -1,18 +1,16 @@
-#!/usr/bin/env node
 'use strict';
-const sequelize = require('../src/db.js');
-const _ = require('underscore');
+var _ = require('underscore');
 
 function printer() {
-  let value = '';
+  var value = '';
 
   function print(/* vararg */) {
-    let args = [].slice.call(arguments);
+    var args = [].slice.call(arguments);
     value += '\n * ' + args.join(' ');
     return self;
   }
 
-  let footerCalled = false;
+  var footerCalled = false;
 
   function header(name) {
     value = '/**';
@@ -27,23 +25,20 @@ function printer() {
     return self;
   }
 
-  let self = {
-    print,
-    header,
-    footer,
-    value: () => value,
-    stdout: () => {
-      console.log(value);
-    }
+  var self = {
+    print: print,
+    header: header,
+    footer: footer,
+    value: function() { return value; }
   };
   return self;
 }
 
-const samples = {
+var samples = {
   UUID: '413e8630-c16c-11e5-b8c9-9b7d37852114',
   BIGINT: 1,
   INTEGER: 1,
-  ENUM: type => type.values.join(' | '),
+  ENUM: function() { return type.values.join(' | '); },
   STRING: 'string',
   DATE: '2015-12-31T23:59:59.123',
   TEXT: 'text'
@@ -51,34 +46,34 @@ const samples = {
 
 function createObject(model, options) {
   options = options || {};
-  let include = options.include;
-  let includeAll = !include;
-  let ignoredFields = options.ignoredFields;
-  let root = {};
+  var include = options.include;
+  var includeAll = !include;
+  var ignoredFields = options.ignoredFields;
+  var root = {};
 
-  let stack = [{
+  var stack = [{
     obj: root,
-    model,
-    include
+    model: model,
+    include: include
   }];
 
-  let previousModels = [];
+  var previousModels = [];
 
   while(stack.length) {
-    let data = stack.pop();
-    let model = data.model;
+    var data = stack.pop();
+    var model = data.model;
     if (typeof model === 'string') model = sequelize.model(model);
 
-    let obj = data.obj;
+    var obj = data.obj;
 
-    let include = data.include;
-    let association = data.association;
-    let associationName = data.associationName;
-    let parent = data.parent;
+    var include = data.include;
+    var association = data.association;
+    var associationName = data.associationName;
+    var parent = data.parent;
 
     if (includeAll && previousModels.indexOf(model.tableName) >= 0) {
       if (parent && association && associationName) {
-        let isArray = association.associationType === 'HasMany';
+        var isArray = association.associationType === 'HasMany';
         parent[associationName] = isArray ? [{}] : {};
         continue;
       }
@@ -86,19 +81,19 @@ function createObject(model, options) {
     previousModels.push(model.tableName);
 
 
-    _.each(model.rawAttributes, (attr, attrName) => {
+    _.each(model.rawAttributes, function(attr, attrName) {
       if (ignoredFields.indexOf(attrName) >= 0) return;
-      let sample = samples[attr.type.key];
+      var sample = samples[attr.type.key];
       if (typeof sample === 'function') {
         sample = sample(attr.type);
       }
       obj[attrName] = sample;
     });
 
-    _.each(model.associations, (association, associationName) => {
-      let newInclude;
-      let found = include && include.some(inc => {
-        let found = inc.model && association.target;
+    _.each(model.associations, function(association, associationName) {
+      var newInclude;
+      var found = include && include.some(function(inc) {
+        var found = inc.model && association.target;
         if (found) {
           newInclude = inc.include;
           return true;
@@ -110,14 +105,14 @@ function createObject(model, options) {
         obj: {},
         parent: obj,
         include: newInclude,
-        association,
-        associationName,
+        association: association,
+        associationName: associationName,
         model: association.target
       });
     });
 
     if (parent && association && associationName) {
-      let isArray = association.associationType === 'HasMany';
+      var isArray = association.associationType === 'HasMany';
       parent[associationName] = isArray ? [obj] : obj;
     }
   }
@@ -126,14 +121,14 @@ function createObject(model, options) {
 }
 
 function defineDoc(model, modelName, type) {
-  let p = printer().header(modelName = type);
-  _.each(model.rawAttributes, (attr, attrName) => {
+  var p = printer().header(modelName = type);
+  _.each(model.rawAttributes, function(attr, attrName) {
     p.print(
       '@api' + type, '{' + attr.type.key.toLowerCase() + '}', attrName
     );
   });
-  _.each(model.associations, (association, associationName) => {
-    let _type = association.target.tableName;
+  _.each(model.associations, function(association, associationName) {
+    var _type = association.target.tableName;
     if (association.associationType === 'HasMany') {
       _type += '[]';
     }
@@ -148,27 +143,33 @@ function defineExample(obj, objName, exampleType, isArray) {
     obj = [obj];
     objName += 'Array';
   }
-  let p = printer().header(objName + exampleType);
+  var p = printer().header(objName + exampleType);
   p.print('@api' + exampleType + 'Example {json}', exampleType);
-  let lines = JSON.stringify(obj, null, '  ').split('\n');
-  lines.forEach(line => p.print('    ' + line));
+  var lines = JSON.stringify(obj, null, '  ').split('\n');
+  lines.forEach(function(line) { p.print('    ' + line); });
   return p.footer();
 }
 
 function defineExamples(model, options) {
-  let name = model.tableName;
-  let obj = createObject(model, options);
+  var name = model.tableName;
+  var obj = createObject(model, options);
 
-  let request = defineExample(obj, name, 'Request', false).value();
-  let requestArray = defineExample(obj, name, 'Request', true).value();
+  var request = defineExample(obj, name, 'Request', false).value();
+  var requestArray = defineExample(obj, name, 'Request', true).value();
 
-  let response = defineExample(obj, name, 'Success', false).value();
-  let responseArray = defineExample(obj, name, 'Success', true).value();
+  var response = defineExample(obj, name, 'Success', false).value();
+  var responseArray = defineExample(obj, name, 'Success', true).value();
 
   return request + requestArray + response + responseArray;
 }
 
-let examples = defineExamples(sequelize.models.form, {
+function auto(sequelize, options) {
+  _.each(sequelize.models, function(model, key) {
+    defineExamples(model, options[model.tableName]);
+  });
+}
+
+var examples = defineExamples(sequelize.models.form, {
   ignoredFields: ['createdAt', 'updatedAt'],
   include: [{
     model: 'group',
@@ -180,16 +181,10 @@ let examples = defineExamples(sequelize.models.form, {
 
 console.log('examples', examples);
 
-// defineExample(obj, sequelize.models.formTableName, k
-
-// defineExample(sequelize.models.form, 'Request', {
-//   ignoredFields: ['createdAt', 'updatedAt'],
-//   include: [{
-//     model: 'group',
-//     include: [{
-//       model: 'element'
-//     }]
-//   }]
-// }).stdout();
-
-module.exports = { defineDoc, defineExample, createObject };
+module.exports = {
+  auto: auto,
+  createObject: createObject,
+  defineDoc: defineDoc,
+  defineExample: defineExample,
+  defineExamples: defineExamples
+};
