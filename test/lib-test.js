@@ -11,7 +11,7 @@ function createSequelize() {
   fs.readdirSync(path.join(__dirname, 'models'))
   .filter(function(file) { return file.endsWith('.js'); })
   .forEach(function(file) {
-    sequelize.import(path.join(__dirname, 'models', file))
+    sequelize.import(path.join(__dirname, 'models', file));
   });
 
   var parent = sequelize.models.parent;

@@ -12,8 +12,6 @@ function create(sequelize) {
       return self;
     }
 
-    var footerCalled = false;
-
     function header(name) {
       value = '/**';
       value += '\n * @apiDefine ' + name;
@@ -21,8 +19,6 @@ function create(sequelize) {
     }
 
     function footer() {
-      if (footerCalled) return;
-      footerCalled = true;
       value += '\n */\n';
       return self;
     }
@@ -61,23 +57,21 @@ function create(sequelize) {
 
     var previousModels = [];
 
-    while(stack.length) {
+    while (stack.length) {
       var data = stack.pop();
-      var model = data.model;
+      model = data.model;
 
       var obj = data.obj;
 
-      var include = data.include;
+      include = data.include;
       var association = data.association;
       var associationName = data.associationName;
       var parent = data.parent;
 
       if (includeAll && previousModels.indexOf(model.name) >= 0) {
-        if (parent && association && associationName) {
-          var isArray = association.associationType === 'HasMany';
-          parent[associationName] = isArray ? [{}] : {};
-          continue;
-        }
+        var isArray = association.associationType === 'HasMany';
+        parent[associationName] = isArray ? [{}] : {};
+        continue;
       }
       previousModels.push(model.name);
 
@@ -95,7 +89,7 @@ function create(sequelize) {
         var newInclude;
         var found = include && include.some(function(inc) {
           var model = inc.model;
-          if (typeof model === 'string') model = sequelize.model(model);
+          model = sequelize.model(model);
           if (model === association.target) {
             newInclude = inc.include;
             return true;
@@ -114,8 +108,8 @@ function create(sequelize) {
       });
 
       if (parent && association && associationName) {
-        var isArray = association.associationType === 'HasMany';
-        parent[associationName] = isArray ? [obj] : obj;
+        var array = association.associationType === 'HasMany';
+        parent[associationName] = array ? [obj] : obj;
       }
     }
 
@@ -177,8 +171,8 @@ function create(sequelize) {
     var success = defineExample(name, 'Success', obj, false);
     var successArray = defineExample(name, 'Success', obj, true);
 
-    var obj = Object.create({ toString: _docToString });
-    var doc = _.extend(obj, {
+    var proto = Object.create({ toString: _docToString });
+    var doc = _.extend(proto, {
       param: defineDoc(model, 'Param'),
       request: request,
       requestArray: requestArray,
@@ -212,8 +206,8 @@ function create(sequelize) {
       results[model.name] = defineAll(model, options[model.name]);
     });
 
-    var obj = Object.create({ toString: _allDocToString });
-    return _.extend(obj, results);
+    var proto = Object.create({ toString: _allDocToString });
+    return _.extend(proto, results);
   }
 
   var self = {

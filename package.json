@@ -4,6 +4,8 @@
   "description": "Automatically generates examples for apidoc from sequelize model definitions",
   "main": "lib.js",
   "scripts": {
+    "coverage": "istanbul cover --report text _mocha",
+    "lint": "eslint lib.js test/",
     "test": "mocha"
   },
   "repository": {
@@ -24,6 +26,8 @@
   "homepage": "https://github.com/jeremija/apidoc-sequelize-generator#readme",
   "devDependencies": {
     "chai": "^3.4.1",
+    "eslint": "^1.10.3",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "sequelize": "^3.18.0",
     "sqlite3": "^3.1.1"
