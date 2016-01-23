@@ -21,7 +21,7 @@ var sequelize = require('./path/to/my/sequelize/instance.js');
  * automatically generate documentation for all model definitions
  */
 var docs = docgen(sequelize).auto();
-console.log(docs);
+console.log(docs.toString());
 
 /*
  * only include the child association for myModel
@@ -34,7 +34,7 @@ docs = docgen(sequelize).auto({
   }
 });
 // all model definitions, but myModel will only contain the child association
-console.log(docs);
+console.log(docs.toString());
 
 
 /*
@@ -43,7 +43,7 @@ console.log(docs);
 docs = docgen(sequelize, {
   DATE: '2015-12-31 23:59:59'
 }).auto();
-console.log(docs)
+console.log(docs.toString())
 
 
 /*
@@ -61,8 +61,8 @@ console.log(object);
 /*
  *create all definitions for object
  */
-object = docgen(sequelize).defineAll(sequelize.models.myModel, 'Param');
-console.log(object);
+docs = docgen(sequelize).defineAll(sequelize.models.myModel, 'Param');
+console.log(docs.toString());
 
 ```
 
