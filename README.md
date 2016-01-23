@@ -51,7 +51,7 @@ The output will contain apidoc comments which can then be reused by using
 `@apiUse <name>` any time the specific model is expected in object body or
 response:
 
-```
+```javascript
 /**
  * @apiDefine parentParam
  * @apiParam {integer} id
