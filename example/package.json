@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "apidoc-sequelize-generator": "^1.0.0",
+    "sequelize": "^3.18.0",
+    "sqlite3": "^3.1.1"
+  }
+}

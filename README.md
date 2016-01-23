@@ -13,6 +13,216 @@ npm install apidoc-sequelize-generator
 
 # usage
 
+## quick example
+
+Here is a full example along with sequelize model definitions generating the
+apidoc comments:
+
+```javascript
+var Sequelize = require('sequelize');
+var sequelize = new Sequelize('sqlite://');
+var gendoc = require('apidoc-sequelize-generator');
+
+var parent = sequelize.define('parent', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
+
+var child = sequelize.define('child', {
+  name: {
+    type: Sequelize.STRING,
+  },
+  birthday: {
+    type: Sequelize.DATE,
+    allowNull: true
+  }
+});
+
+parent.hasMany(child);
+
+var docs = gendoc(sequelize).auto().toString();
+
+console.log(docs);
+```
+
+The output will contain apidoc comments which can then be reused by using
+`@apiUse <name>` any time the specific model is expected in object body or
+response:
+
+```
+/**
+ * @apiDefine parentParam
+ * @apiParam {integer} id
+ * @apiParam {string} name
+ * @apiParam {date} createdAt
+ * @apiParam {date} updatedAt
+ * @apiParam {child[]} children
+ */
+
+/**
+ * @apiDefine parentRequest
+ * @apiRequestExample {json} Request
+ *     {
+ *       "id": 1,
+ *       "name": "string",
+ *       "createdAt": "2015-12-31T23:59:59.123",
+ *       "updatedAt": "2015-12-31T23:59:59.123",
+ *       "children": [
+ *         {
+ *           "id": 1,
+ *           "name": "string",
+ *           "birthday": "2015-12-31T23:59:59.123",
+ *           "createdAt": "2015-12-31T23:59:59.123",
+ *           "updatedAt": "2015-12-31T23:59:59.123",
+ *           "parentId": 1
+ *         }
+ *       ]
+ *     }
+ */
+
+/**
+ * @apiDefine parentArrayRequest
+ * @apiRequestExample {json} Request
+ *     [
+ *       {
+ *         "id": 1,
+ *         "name": "string",
+ *         "createdAt": "2015-12-31T23:59:59.123",
+ *         "updatedAt": "2015-12-31T23:59:59.123",
+ *         "children": [
+ *           {
+ *             "id": 1,
+ *             "name": "string",
+ *             "birthday": "2015-12-31T23:59:59.123",
+ *             "createdAt": "2015-12-31T23:59:59.123",
+ *             "updatedAt": "2015-12-31T23:59:59.123",
+ *             "parentId": 1
+ *           }
+ *         ]
+ *       }
+ *     ]
+ */
+
+/**
+ * @apiDefine parentSuccess
+ * @apiSuccessExample {json} Success
+ *     {
+ *       "id": 1,
+ *       "name": "string",
+ *       "createdAt": "2015-12-31T23:59:59.123",
+ *       "updatedAt": "2015-12-31T23:59:59.123",
+ *       "children": [
+ *         {
+ *           "id": 1,
+ *           "name": "string",
+ *           "birthday": "2015-12-31T23:59:59.123",
+ *           "createdAt": "2015-12-31T23:59:59.123",
+ *           "updatedAt": "2015-12-31T23:59:59.123",
+ *           "parentId": 1
+ *         }
+ *       ]
+ *     }
+ */
+
+/**
+ * @apiDefine parentArraySuccess
+ * @apiSuccessExample {json} Success
+ *     [
+ *       {
+ *         "id": 1,
+ *         "name": "string",
+ *         "createdAt": "2015-12-31T23:59:59.123",
+ *         "updatedAt": "2015-12-31T23:59:59.123",
+ *         "children": [
+ *           {
+ *             "id": 1,
+ *             "name": "string",
+ *             "birthday": "2015-12-31T23:59:59.123",
+ *             "createdAt": "2015-12-31T23:59:59.123",
+ *             "updatedAt": "2015-12-31T23:59:59.123",
+ *             "parentId": 1
+ *           }
+ *         ]
+ *       }
+ *     ]
+ */
+
+/**
+ * @apiDefine childParam
+ * @apiParam {integer} id
+ * @apiParam {string} name
+ * @apiParam {date} [birthday]
+ * @apiParam {date} createdAt
+ * @apiParam {date} updatedAt
+ * @apiParam {integer} [parentId]
+ */
+
+/**
+ * @apiDefine childRequest
+ * @apiRequestExample {json} Request
+ *     {
+ *       "id": 1,
+ *       "name": "string",
+ *       "birthday": "2015-12-31T23:59:59.123",
+ *       "createdAt": "2015-12-31T23:59:59.123",
+ *       "updatedAt": "2015-12-31T23:59:59.123",
+ *       "parentId": 1
+ *     }
+ */
+
+/**
+ * @apiDefine childArrayRequest
+ * @apiRequestExample {json} Request
+ *     [
+ *       {
+ *         "id": 1,
+ *         "name": "string",
+ *         "birthday": "2015-12-31T23:59:59.123",
+ *         "createdAt": "2015-12-31T23:59:59.123",
+ *         "updatedAt": "2015-12-31T23:59:59.123",
+ *         "parentId": 1
+ *       }
+ *     ]
+ */
+
+/**
+ * @apiDefine childSuccess
+ * @apiSuccessExample {json} Success
+ *     {
+ *       "id": 1,
+ *       "name": "string",
+ *       "birthday": "2015-12-31T23:59:59.123",
+ *       "createdAt": "2015-12-31T23:59:59.123",
+ *       "updatedAt": "2015-12-31T23:59:59.123",
+ *       "parentId": 1
+ *     }
+ */
+
+/**
+ * @apiDefine childArraySuccess
+ * @apiSuccessExample {json} Success
+ *     [
+ *       {
+ *         "id": 1,
+ *         "name": "string",
+ *         "birthday": "2015-12-31T23:59:59.123",
+ *         "createdAt": "2015-12-31T23:59:59.123",
+ *         "updatedAt": "2015-12-31T23:59:59.123",
+ *         "parentId": 1
+ *       }
+ *     ]
+ */
+```
+
+This code is located in [example](example) directory.
+
+## description of other methods
+
+If you already have sequelize model definitions and wish to automatically
+generate documentation of it's models, you can do so easily:
+
 ```javascript
 var docgen = require('apidoc-sequelize-generator');
 var sequelize = require('./path/to/my/sequelize/instance.js');
