@@ -214,11 +214,19 @@ describe('defineAll()', function() {
   it('should define all types of exampels for a specific model', function() {
     var examples = lib(sequelize).defineAll(sequelize.models.parent);
 
-    expect(examples.param).to.equal(read('samples/param.js'));
-    expect(examples.request).to.equal(read('samples/request.js'));
-    expect(examples.requestArray).to.equal(read('samples/requestArray.js'));
-    expect(examples.success).to.equal(read('samples/success.js'));
-    expect(examples.successArray).to.equal(read('samples/successArray.js'));
+    var param = read('samples/param.js');
+    var request = read('samples/request.js');
+    var requestArray = read('samples/requestArray.js');
+    var success = read('samples/success.js');
+    var successArray = read('samples/successArray.js');
+
+    expect(examples.param).to.equal(param);
+    expect(examples.request).to.equal(request);
+    expect(examples.requestArray).to.equal(requestArray);
+    expect(examples.success).to.equal(success);
+    expect(examples.successArray).to.equal(successArray);
+
+    expect(examples.toString()).to.be.a('string');
   });
 });
 

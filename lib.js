@@ -94,7 +94,7 @@ function create(sequelize) {
       _.each(model.associations, function(association, associationName) {
         var newInclude;
         var found = include && include.some(function(inc) {
-          let model = inc.model;
+          var model = inc.model;
           if (typeof model === 'string') model = sequelize.model(model);
           if (model === association.target) {
             newInclude = inc.include;
@@ -132,8 +132,8 @@ function create(sequelize) {
     });
     _.each(model.associations, function(association, associationName) {
       var _type = association.target.name;
-      let fkAttributes = association.target.rawAttributes[association.foreignKey];
-      let allowNull = fkAttributes ? fkAttributes.allowNull : false;
+      var fkAttributes = association.target.rawAttributes[association.foreignKey];
+      var allowNull = fkAttributes ? fkAttributes.allowNull : false;
       if (association.associationType === 'HasMany') {
         _type += '[]';
       } else if (allowNull) {
@@ -159,6 +159,14 @@ function create(sequelize) {
     return p.footer().value();
   }
 
+  function _docToString() {
+    var string = '';
+    _.each(this, function(value) {
+      string += value + '\n';
+    });
+    return string;
+  }
+
   function defineAll(model, options) {
     var name = model.name;
     var obj = createObject(model, options);
@@ -169,13 +177,32 @@ function create(sequelize) {
     var success = defineExample(name, 'Success', obj, false);
     var successArray = defineExample(name, 'Success', obj, true);
 
-    return {
+    var obj = Object.create({ toString: _docToString });
+    var doc = _.extend(obj, {
       param: defineDoc(model, 'Param'),
       request: request,
       requestArray: requestArray,
       success: success,
       successArray: successArray
-    };
+    });
+
+    // doc.toString = function() {
+    //   var string = '';
+    //   _.each(doc, function(value) {
+    //     string += value + '\n';
+    //   });
+    //   return string;
+    // }
+
+    return doc;
+  }
+
+  function _allDocToString() {
+      var string = '';
+      _.each(this, function(docs) {
+        string += docs.toString();
+      });
+      return string;
   }
 
   function auto(options) {
@@ -185,17 +212,8 @@ function create(sequelize) {
       results[model.name] = defineAll(model, options[model.name]);
     });
 
-    results.toString = function() {
-      let string = '';
-      _.each(results, function(result) {
-        _.each(result, function(doc) {
-          string += doc + '\n';
-        });
-      });
-      return string;
-    }
-
-    return results;
+    var obj = Object.create({ toString: _allDocToString });
+    return _.extend(obj, results);
   }
 
   var self = {
