@@ -1,5 +1,7 @@
 # apidoc-sequelize-generator
 
+[![Build Status](https://travis-ci.org/jeremija/apidoc-sequelize-generator.svg?branch=master)](https://travis-ci.org/jeremija/apidoc-sequelize-generator)
+
 Automatically generate definitions for [apidoc](http://apidocjs.com/) from
 sequelize models.
 
