@@ -63,7 +63,7 @@ response:
 
 /**
  * @apiDefine parentRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -84,7 +84,7 @@ response:
 
 /**
  * @apiDefine parentArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,
@@ -106,8 +106,8 @@ response:
  */
 
 /**
- * @apiDefine parentSuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentResponse
+ * @apiSuccessExample {json} Response
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -127,8 +127,8 @@ response:
  */
 
 /**
- * @apiDefine parentArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,
@@ -161,7 +161,7 @@ response:
 
 /**
  * @apiDefine childRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -174,7 +174,7 @@ response:
 
 /**
  * @apiDefine childArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,
@@ -188,8 +188,8 @@ response:
  */
 
 /**
- * @apiDefine childSuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine childResponse
+ * @apiSuccessExample {json} Response
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -201,8 +201,8 @@ response:
  */
 
 /**
- * @apiDefine childArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine childArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,

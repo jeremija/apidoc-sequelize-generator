@@ -168,15 +168,15 @@ describe('defineDoc()', function() {
 
 describe('defineExample()', function() {
   it('should create @apiDefine with @apiSuccessExample', function() {
-    var doc = lib(sequelize).defineExample('myObj', 'Success', {
+    var doc = lib(sequelize).defineExample('myObj', 'Response', {
       id: 1,
       name: 'string'
     });
 
     expect(doc).to.equal(
       '/**\n' +
-      ' * @apiDefine myObjSuccess\n' +
-      ' * @apiSuccessExample {json} Success\n' +
+      ' * @apiDefine myObjResponse\n' +
+      ' * @apiSuccessExample {json} Response\n' +
       ' *     {\n' +
       ' *       "id": 1,\n' +
       ' *       "name": "string"\n' +
@@ -194,7 +194,7 @@ describe('defineExample()', function() {
     expect(doc).to.equal(
       '/**\n' +
       ' * @apiDefine myObjArrayRequest\n' +
-      ' * @apiRequestExample {json} Request\n' +
+      ' * @apiParamExample {json} Request\n' +
       ' *     [\n' +
       ' *       {\n' +
       ' *         "id": 1,\n' +

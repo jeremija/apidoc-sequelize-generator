@@ -10,7 +10,7 @@
 
 /**
  * @apiDefine childRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -54,7 +54,7 @@
 
 /**
  * @apiDefine childArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,
@@ -99,8 +99,8 @@
  */
 
 /**
- * @apiDefine childSuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine childResponse
+ * @apiSuccessExample {json} Response
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -143,8 +143,8 @@
  */
 
 /**
- * @apiDefine childArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine childArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,
@@ -202,7 +202,7 @@
 
 /**
  * @apiDefine grandchildRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -246,7 +246,7 @@
 
 /**
  * @apiDefine grandchildArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,
@@ -291,8 +291,8 @@
  */
 
 /**
- * @apiDefine grandchildSuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine grandchildResponse
+ * @apiSuccessExample {json} Response
  *     {
  *       "id": 1,
  *       "name": "string",
@@ -335,8 +335,8 @@
  */
 
 /**
- * @apiDefine grandchildArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine grandchildArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,
@@ -397,7 +397,7 @@
 
 /**
  * @apiDefine parentRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "uuid": "413e8630-c16c-11e5-b8c9-9b7d37852114",
@@ -441,7 +441,7 @@
 
 /**
  * @apiDefine parentArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,
@@ -486,8 +486,8 @@
  */
 
 /**
- * @apiDefine parentSuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentResponse
+ * @apiSuccessExample {json} Response
  *     {
  *       "id": 1,
  *       "uuid": "413e8630-c16c-11e5-b8c9-9b7d37852114",
@@ -530,8 +530,8 @@
  */
 
 /**
- * @apiDefine parentArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,
@@ -586,7 +586,7 @@
 
 /**
  * @apiDefine parentDetailsRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "address": "string",
@@ -598,7 +598,7 @@
 
 /**
  * @apiDefine parentDetailsArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,
@@ -611,8 +611,8 @@
  */
 
 /**
- * @apiDefine parentDetailsSuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentDetailsResponse
+ * @apiSuccessExample {json} Response
  *     {
  *       "id": 1,
  *       "address": "string",
@@ -623,8 +623,8 @@
  */
 
 /**
- * @apiDefine parentDetailsArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentDetailsArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,

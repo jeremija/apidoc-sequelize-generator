@@ -1,6 +1,6 @@
 /**
- * @apiDefine parentArraySuccess
- * @apiSuccessExample {json} Success
+ * @apiDefine parentArrayResponse
+ * @apiSuccessExample {json} Response
  *     [
  *       {
  *         "id": 1,

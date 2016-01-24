@@ -1,6 +1,6 @@
 /**
  * @apiDefine parentArrayRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     [
  *       {
  *         "id": 1,

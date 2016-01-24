@@ -11,6 +11,11 @@ var defaultSamples = {
   TEXT: 'text'
 };
 
+var exampleTypes = {
+  Request: 'Param',
+  Response: 'Success'
+};
+
 function create(sequelize, samples) {
   samples = _.extend(defaultSamples, samples);
 
@@ -140,13 +145,14 @@ function create(sequelize, samples) {
     return p.footer().value();
   }
 
-  function defineExample(name, exampleType, obj, isArray) {
+  function defineExample(name, type, obj, isArray) {
     if (isArray) {
       obj = [obj];
       name += 'Array';
     }
-    var p = printer().header(name + exampleType);
-    p.print('@api' + exampleType + 'Example {json}', exampleType);
+    var p = printer().header(name + type);
+    var exampleType = exampleTypes[type];
+    p.print('@api' + exampleType + 'Example {json}', type);
     var lines = JSON.stringify(obj, null, '  ').split('\n');
     lines.forEach(function(line) {
       p.print('    ' + line);
@@ -169,8 +175,8 @@ function create(sequelize, samples) {
     var request = defineExample(name, 'Request', obj, false);
     var requestArray = defineExample(name, 'Request', obj, true);
 
-    var success = defineExample(name, 'Success', obj, false);
-    var successArray = defineExample(name, 'Success', obj, true);
+    var success = defineExample(name, 'Response', obj, false);
+    var successArray = defineExample(name, 'Response', obj, true);
 
     var proto = Object.create({ toString: _docToString });
     var doc = _.extend(proto, {

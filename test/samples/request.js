@@ -1,6 +1,6 @@
 /**
  * @apiDefine parentRequest
- * @apiRequestExample {json} Request
+ * @apiParamExample {json} Request
  *     {
  *       "id": 1,
  *       "uuid": "413e8630-c16c-11e5-b8c9-9b7d37852114",

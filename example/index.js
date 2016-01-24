@@ -2,7 +2,8 @@
 
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize('sqlite://');
-var gendoc = require('apidoc-sequelize-generator');
+// var gendoc = require('apidoc-sequelize-generator');
+var gendoc = require('../lib.js');
 
 var parent = sequelize.define('parent', {
   name: {
