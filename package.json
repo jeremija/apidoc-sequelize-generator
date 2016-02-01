@@ -1,6 +1,6 @@
 {
   "name": "apidoc-sequelize-generator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Automatically generates examples for apidoc from sequelize model definitions",
   "main": "lib.js",
   "scripts": {
