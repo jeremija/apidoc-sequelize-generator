@@ -28,9 +28,8 @@ function create(sequelize, samples) {
       return self;
     }
 
-    function header(name) {
+    function header() {
       value = '/**';
-      value += '\n * @apiDefine ' + name;
       return self;
     }
 
@@ -122,8 +121,37 @@ function create(sequelize, samples) {
     return root;
   }
 
+  function _capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function defineJsdoc(model) {
+    var p = printer();
+    p.header().print('@typedef {Object}', _capitalizeFirstLetter(model.name));
+    _.each(model.rawAttributes, function(attr, attrName) {
+      if (attr.allowNull) attrName = '[' + attrName + ']';
+      var type = attr.type.key.toLowerCase();
+      p.print(
+        '@property', '{' + _capitalizeFirstLetter(type) + '}', attrName
+      );
+    });
+    _.each(model.associations, function(association, associationName) {
+      var _type = _capitalizeFirstLetter(association.target.name);
+      var fkAttributes = association.target.rawAttributes[association.foreignKey];
+      var allowNull = fkAttributes ? fkAttributes.allowNull : false;
+      if (association.associationType === 'HasMany') {
+        _type = 'Array.<' + _type + '>';
+      } else if (allowNull) {
+        associationName = '[' + associationName + ']';
+      }
+      p.print('@property', '{' + _type + '}', associationName);
+    });
+
+    return p.footer().value();
+  }
+
   function defineDoc(model, type) {
-    var p = printer().header(model.name + type);
+    var p = printer().header().print('@apiDefine', model.name + type);
     _.each(model.rawAttributes, function(attr, attrName) {
       if (attr.allowNull) attrName = '[' + attrName + ']';
       p.print(
@@ -150,7 +178,7 @@ function create(sequelize, samples) {
       obj = [obj];
       name += 'Array';
     }
-    var p = printer().header(name + type);
+    var p = printer().header().print('@apiDefine', name + type);
     var exampleType = exampleTypes[type];
     p.print('@api' + exampleType + 'Example {json}', type);
     var lines = JSON.stringify(obj, null, '  ').split('\n');
@@ -213,6 +241,7 @@ function create(sequelize, samples) {
     auto: auto,
     createObject: createObject,
     defineDoc: defineDoc,
+    defineJsdoc: defineJsdoc,
     defineExample: defineExample,
     defineAll: defineAll
   };

@@ -166,6 +166,28 @@ describe('defineDoc()', function() {
   });
 });
 
+describe('defineJsdoc()', function() {
+  it('should create @typedef with multple @property defs', function() {
+    var doc = lib(sequelize).defineJsdoc(sequelize.models.parent);
+    expect(doc).to.equal(
+      '/**\n' +
+      ' * @typedef {Object} Parent\n' +
+      ' * @property {Bigint} id\n' +
+      ' * @property {Uuid} uuid\n' +
+      ' * @property {String} name\n' +
+      ' * @property {Integer} [count]\n' +
+      ' * @property {Enum} category\n' +
+      ' * @property {Date} birthday\n' +
+      ' * @property {Date} createdAt\n' +
+      ' * @property {Date} updatedAt\n' +
+      ' * @property {Bigint} [parentDetailsId]\n' +
+      ' * @property {ParentDetails} [parentDetail]\n' +
+      ' * @property {Array.<Child>} children\n' +
+      ' */\n'
+    );
+  });
+});
+
 describe('defineExample()', function() {
   it('should create @apiDefine with @apiSuccessExample', function() {
     var doc = lib(sequelize).defineExample('myObj', 'Response', {

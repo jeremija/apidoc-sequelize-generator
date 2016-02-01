@@ -5,6 +5,7 @@
   "main": "lib.js",
   "scripts": {
     "coverage": "istanbul cover --report text _mocha",
+    "coverage-html": "istanbul cover --report lcov _mocha",
     "lint": "eslint lib.js test/",
     "test": "mocha"
   },
