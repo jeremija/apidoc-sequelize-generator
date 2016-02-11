@@ -130,7 +130,7 @@ function create(sequelize, samples) {
     p.header().print('@typedef {Object}', _capitalizeFirstLetter(model.name));
     _.each(model.rawAttributes, function(attr, attrName) {
       if (attr.allowNull) attrName = '[' + attrName + ']';
-      var type = attr.type.key.toLowerCase();
+      var type = (attr.type.key || attr.type).toLowerCase();
       p.print(
         '@property', '{' + _capitalizeFirstLetter(type) + '}', attrName
       );
@@ -154,8 +154,9 @@ function create(sequelize, samples) {
     var p = printer().header().print('@apiDefine', model.name + type);
     _.each(model.rawAttributes, function(attr, attrName) {
       if (attr.allowNull) attrName = '[' + attrName + ']';
+      var type = (attr.type.key || attr.type).toLowerCase();
       p.print(
-        '@apiParam', '{' + attr.type.key.toLowerCase() + '}', attrName
+        '@apiParam', '{' + type + '}', attrName
       );
     });
     _.each(model.associations, function(association, associationName) {
