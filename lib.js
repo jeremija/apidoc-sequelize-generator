@@ -16,6 +16,10 @@ var exampleTypes = {
   Response: 'Success'
 };
 
+function isAssocAnArray(associationType) {
+  return associationType === 'HasMany' || associationType === 'BelongsToMany';
+}
+
 function create(sequelize, samples) {
   samples = _.extend(defaultSamples, samples);
 
@@ -74,7 +78,7 @@ function create(sequelize, samples) {
       var parent = data.parent;
 
       if (includeAll && previousModels.indexOf(model.name) >= 0) {
-        var isArray = association.associationType === 'HasMany';
+        var isArray = isAssocAnArray(association.associationType);
         parent[associationName] = isArray ? [{}] : {};
         continue;
       }
@@ -113,7 +117,7 @@ function create(sequelize, samples) {
       });
 
       if (parent && association && associationName) {
-        var array = association.associationType === 'HasMany';
+        var array = isAssocAnArray(association.associationType);
         parent[associationName] = array ? [obj] : obj;
       }
     }
@@ -139,7 +143,7 @@ function create(sequelize, samples) {
       var _type = _capitalizeFirstLetter(association.target.name);
       var fkAttributes = association.target.rawAttributes[association.foreignKey];
       var allowNull = fkAttributes ? fkAttributes.allowNull : false;
-      if (association.associationType === 'HasMany') {
+      if (isAssocAnArray(association.associationType)) {
         _type = 'Array.<' + _type + '>';
       } else if (allowNull) {
         associationName = '[' + associationName + ']';
@@ -163,7 +167,7 @@ function create(sequelize, samples) {
       var _type = association.target.name;
       var fkAttributes = association.target.rawAttributes[association.foreignKey];
       var allowNull = fkAttributes ? fkAttributes.allowNull : false;
-      if (association.associationType === 'HasMany') {
+      if (isAssocAnArray(association.associationType)) {
         _type += '[]';
       } else if (allowNull) {
         associationName = '[' + associationName + ']';
